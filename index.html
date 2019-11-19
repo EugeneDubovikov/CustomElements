@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Custom elements</title>
+</head>
+<body>
+    <form action="#" method="get">
+        <div>
+            <custom-select placeholder="Выберите категорию">
+                <select name="foo">
+                    <option value=12>dar</option>
+                    <option value=13>boo</option>
+                    <option value=14>daz</option>
+                </select>
+            </custom-select>
+            <custom-text-input>
+                <input name="doo" value=65 placeholder="Введите текст" pattern="\d{4}" required>
+            </custom-text-input>
+        </div>
+    </form>
+    <script src="custom-select.js"></script>
+    <script src="custom-text-input.js"></script>
+</body>
+</html>
