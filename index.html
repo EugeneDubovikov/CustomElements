@@ -7,21 +7,23 @@
     <title>Custom elements</title>
 </head>
 <body>
-    <form action="#" method="get">
-        <div>
-            <custom-select placeholder="Выберите категорию">
-                <select name="foo">
-                    <option value=12>dar</option>
-                    <option value=13>boo</option>
-                    <option value=14>daz</option>
-                </select>
-            </custom-select>
-            <custom-text-input>
-                <input name="doo" value=65 placeholder="Введите текст" pattern="\d{4}" required>
-            </custom-text-input>
-        </div>
-    </form>
-    <script src="custom-select.js"></script>
-    <script src="custom-text-input.js"></script>
+    <custom-form action="#" method="get">
+        <form>
+            <div>
+                <custom-select placeholder="Выберите категорию" options='[{"name": "twelve","value": 12},{"name": "thirteen","value": 13},{"name": "fourteen","value": 14}]'>
+                    <input name="foo" type="number" value=12 max="100">
+                </custom-select>
+            </div>
+            <div>
+                <custom-text-input>
+                    <input name="doo" value=65 placeholder="Введите текст" pattern="\d{4}" required>
+                </custom-text-input>
+            </div>
+            <input type="submit" value="Save">
+        </form>
+    </custom-form>
+    <script src="/custom-select/custom-select.js?3"></script>
+    <script src="/custom-text/custom-text.js?4"></script>
+    <script src="/custom-form/custom-form.js?6"></script>
 </body>
 </html>
