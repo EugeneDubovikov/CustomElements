@@ -12,7 +12,7 @@ class CustomTextInput extends HTMLElement {
         let tmpl = document.createElement('template');
         let link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/custom-text/custom-text.css';
+        link.href = '/custom-text/style.css';
         tmpl.innerHTML = `
             <div class="text__error"></div>
             <slot></slot>
@@ -98,4 +98,6 @@ class CustomTextInput extends HTMLElement {
     }
 }
 
-customElements.define('custom-text-input', CustomTextInput);
+if (window.supportsShadowDOMV1) {
+    customElements.define('custom-text-input', CustomTextInput);
+}

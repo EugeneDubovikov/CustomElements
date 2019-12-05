@@ -7,7 +7,7 @@ class CustomSelect extends HTMLElement {
         let tmpl = document.createElement('template');
         let link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/custom-select/custom-select.css';
+        link.href = '/custom-select/style.css';
         tmpl.innerHTML = `
             <div class="select__selected"></div>
             <div class="select__list_container">
@@ -88,4 +88,7 @@ class CustomSelect extends HTMLElement {
         this.selected.innerText = this.placeholder;
     }
 }
-customElements.define('custom-select', CustomSelect);
+
+if (window.supportsShadowDOMV1) {
+    customElements.define('custom-select', CustomSelect);
+}

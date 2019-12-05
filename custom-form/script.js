@@ -5,7 +5,7 @@ class CustomForm extends HTMLElement {
         let tmpl = document.createElement('template');
         let link = document.createElement('link');
         link.rel = 'stylesheet';
-        link.href = '/custom-form/custom-form.css';
+        link.href = '/custom-form/style.css';
         tmpl.innerHTML = `
             <slot></slot>`;
         let shadowRoot = this.attachShadow({mode: 'open'});
@@ -30,4 +30,6 @@ class CustomForm extends HTMLElement {
         this[name] = newValue;
     }
 }
-customElements.define('custom-form', CustomForm);
+if (window.supportsShadowDOMV1) {
+    customElements.define('custom-form', CustomForm);
+}
