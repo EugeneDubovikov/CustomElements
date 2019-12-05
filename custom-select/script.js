@@ -4,6 +4,7 @@ class CustomSelect extends HTMLElement {
         this.input = this.querySelector('input');
         this.placeholder = this.getAttribute('placeholder');
         this.disabled = this.hasAttribute('disabled');
+        this.default = this.input.getAttribute('value');
         let tmpl = document.createElement('template');
         let link = document.createElement('link');
         link.rel = 'stylesheet';
@@ -38,10 +39,12 @@ class CustomSelect extends HTMLElement {
 
     set value(val) {
         this.input.value = val;
+        this.selected.innerHTML = this.options.find(o => o.value == val).name;
         this.input.dispatchEvent(new Event("change", {bubbles: true, composed: true}));
     }
 
     init() {
+        this.input.addEventListener("change", this.onChange.bind(this));
         this.selected.addEventListener("click", this.onActivate.bind(this));
         this.list.addEventListener("click", this.onSelect.bind(this));
         this.refresh();
@@ -54,6 +57,7 @@ class CustomSelect extends HTMLElement {
 
     refresh() {
         this.options = JSON.parse(this.getAttribute('options'));
+        this.values = this.options
         this.list.innerHTML = '';
         this.options.forEach(o => {
             let item = document.createElement("div");
@@ -70,6 +74,10 @@ class CustomSelect extends HTMLElement {
         this.classList.toggle('expanded');
     }
 
+    onChange(e) {
+        this.selected.innerHTML = this.options.find(o => o.value == e.target.value).name;
+    }
+
     onSelect(e) {
         let target = e.target.closest('[data-value]');
         if (target) {
@@ -84,7 +92,6 @@ class CustomSelect extends HTMLElement {
     }
 
     reset() {
-        this.value = target.dataset.value;
         this.selected.innerText = this.placeholder;
     }
 }

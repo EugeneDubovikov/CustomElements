@@ -24,6 +24,9 @@ class CustomForm extends HTMLElement {
             console.log(e.target.elements['foo']);
             return false;
         });
+        this.form.addEventListener("reset", function (e) {
+            e.target.querySelectorAll('custom-select, custom-text').forEach(i => i.reset());
+        });
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
