@@ -3,14 +3,10 @@ class CustomForm extends HTMLElement {
         super();
         this.form = this.querySelector('form');
         let tmpl = document.createElement('template');
-        let link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/custom-form/style.css';
         tmpl.innerHTML = `
             <slot></slot>`;
         let shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.appendChild(tmpl.content.cloneNode(true));
-        shadowRoot.appendChild(link);
         this.init();
     }
 
@@ -33,6 +29,6 @@ class CustomForm extends HTMLElement {
         this[name] = newValue;
     }
 }
-if (window.supportsShadowDOMV1) {
+if (typeof(customElements) !== 'undefined') {
     customElements.define('custom-form', CustomForm);
 }

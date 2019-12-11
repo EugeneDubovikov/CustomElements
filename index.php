@@ -1,5 +1,4 @@
 <?$ver = '15'?>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -9,39 +8,15 @@
     <title>Custom elements</title>
 </head>
 <body>
-    <app-body>
-        <custom-form action="#" method="get">
-            <form>
-                <div>
-                    <custom-select placeholder="Выберите категорию" options='<?=json_encode([
-                        [
-                            'name' => 'twelve',
-                            'value' => 12
-                        ],
-                        [
-                            'name' => 'thirteen',
-                            'value' => 13
-                        ],
-                        [
-                            'name' => 'fourteen',
-                            'value' => 14
-                        ]
-                    ])?>'>
-                        <input name="foo" type="number" value=12 max="100">
-                    </custom-select>
-                </div>
-                <div>
-                    <custom-text-input>
-                        <input name="doo" value=65 placeholder="Введите текст" pattern="\d{4}" required>
-                    </custom-text-input>
-                </div>
-                <input type="submit" value="Save">
-            </form>
-        </custom-form>
-    </app-body>
-    <script src="/app-body/script.js?<?=$ver?>"></script>
-    <script src="/custom-select/script.js?<?=$ver?>"></script>
-    <script src="/custom-text/script.js?<?=$ver?>"></script>
-    <script src="/custom-form/script.js?<?=$ver?>"></script>
+    <AppBody>
+        <CustomForm>
+            <div>
+                <CustomSelect></CustomSelect>
+            </div>
+            <div>
+                <CustomTextInput></CustomTextInput>
+            </div>
+        </CustomForm>
+    </AppBody>
 </body>
 </html>

@@ -10,9 +10,34 @@ class CustomTextInput extends HTMLElement {
             this.suggestList = this.querySelector('datalist');
         }
         let tmpl = document.createElement('template');
-        let link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/custom-text/style.css';
+        let link = document.createElement('style');
+        link.innerText = `:host {
+    display: inline-block;
+    position: relative;
+}
+:host .text__error {
+    position: absolute;
+    opacity: 0;
+    left: 0;
+    top: 100%;
+    width: 100%;
+    font: 10px/1 "Open Sans", sans-serif;
+    color: red;
+    -webkit-transition: opacity 0.5s;
+    transition: opacity 0.5s;
+    z-index: 2;
+}
+:host(.invalid) .text__error {
+    opacity: 1;
+}
+::slotted(input) {
+    display: inline-block;
+    width: 100%;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+    padding: 12px;
+    font: 12px/14px "Helios Normal", sans-serif;
+}`;
         tmpl.innerHTML = `
             <div class="text__error"></div>
             <slot></slot>
@@ -98,6 +123,6 @@ class CustomTextInput extends HTMLElement {
     }
 }
 
-if (window.supportsShadowDOMV1) {
+if (typeof(customElements) !== 'undefined') {
     customElements.define('custom-text-input', CustomTextInput);
 }

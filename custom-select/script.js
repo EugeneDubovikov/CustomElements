@@ -6,9 +6,80 @@ class CustomSelect extends HTMLElement {
         this.disabled = this.hasAttribute('disabled');
         this.default = this.input.getAttribute('value');
         let tmpl = document.createElement('template');
-        let link = document.createElement('link');
-        link.rel = 'stylesheet';
-        link.href = '/custom-select/style.css';
+        let link = document.createElement('style');
+        link.innerText = `:host {
+    position: relative;
+}
+:host(.expanded) .select__selected:before {
+    transform: rotate(45deg);
+}
+:host(.expanded) .select__list {
+    height: initial;
+    -ms-transform: scaleY(1);
+    -webkit-transform: scaleY(1);
+    transform: scaleY(1);
+}
+:host([disabled]) .select__selected {
+    color: gainsboro;
+    cursor: not-allowed;
+    background-color: #f6fafd;
+}
+.select__selected {
+    padding: 12px 30px 12px 12px;
+    font-size: 12px;
+    line-height: 14px;
+    border: 1px solid #e5e5e5;
+    border-radius: 2px;
+    position: relative;
+    background-color: white;
+    white-space: nowrap;
+    cursor: pointer;
+}
+.select__selected:before {
+    position: absolute;
+    content: "";
+    border: 2px solid #B3B3B3;
+    border-width: 2px 0 0 2px;
+    width: 7px;
+    height: 7px;
+    right: 14px;
+    transform: rotate(-135deg);
+    top: calc(50% - 5px);
+    transition: transform 0.2s;
+}
+.select__list_container {
+    position: relative;
+    width: 100%
+}
+
+.select__list {
+    position: absolute;
+    background-color: white;
+    left: 0;
+    -webkit-transform-origin: center top;
+    transform-origin: center top;
+    -webkit-transform: scaleY(0);
+    transform: scaleY(0);
+    height: 0;
+    z-index: 3;
+    width: 100%;
+    max-height: 300px;
+    overflow: hidden auto;
+    transition: transform 0.2s, height 0.2s;
+    box-shadow: 2px 2px 2px 1px #0000002b;
+}
+.select__list > * {
+    padding: 10px;
+    transition: background-color 0.2s;
+    display: block;
+    cursor: pointer;
+}
+.select__list > *:hover {
+    background-color: rgba(169, 169, 169, 0.23);
+}
+::slotted(input) {
+    display: none;
+}`;
         tmpl.innerHTML = `
             <div class="select__selected"></div>
             <div class="select__list_container">
@@ -96,6 +167,6 @@ class CustomSelect extends HTMLElement {
     }
 }
 
-if (window.supportsShadowDOMV1) {
+if (typeof(customElements) !== 'undefined') {
     customElements.define('custom-select', CustomSelect);
 }
