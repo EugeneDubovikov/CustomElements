@@ -123,6 +123,6 @@ class CustomTextInput extends HTMLElement {
     }
 }
 
-if (typeof(customElements) !== 'undefined') {
-    customElements.define('custom-text-input', CustomTextInput);
+if ('customElements' in window) {
+    customElements.define('app-text-input', CustomTextInput);
 }

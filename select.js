@@ -1,13 +1,13 @@
 class CustomSelect extends HTMLElement {
     constructor() {
         super();
-        this.input = this.querySelector('input');
         this.placeholder = this.getAttribute('placeholder');
         this.disabled = this.hasAttribute('disabled');
-        this.default = this.input.getAttribute('value');
+        this._name = this.getAttribute('name');
         let tmpl = document.createElement('template');
         let link = document.createElement('style');
         link.innerText = `:host {
+    display: inline-block;
     position: relative;
 }
 :host(.expanded) .select__selected:before {
@@ -15,8 +15,6 @@ class CustomSelect extends HTMLElement {
 }
 :host(.expanded) .select__list {
     height: initial;
-    -ms-transform: scaleY(1);
-    -webkit-transform: scaleY(1);
     transform: scaleY(1);
 }
 :host([disabled]) .select__selected {
@@ -47,95 +45,66 @@ class CustomSelect extends HTMLElement {
     top: calc(50% - 5px);
     transition: transform 0.2s;
 }
-.select__list_container {
-    position: relative;
-    width: 100%
-}
-
 .select__list {
     position: absolute;
     background-color: white;
     left: 0;
-    -webkit-transform-origin: center top;
-    transform-origin: center top;
-    -webkit-transform: scaleY(0);
     transform: scaleY(0);
+    transform-origin: center top;
     height: 0;
     z-index: 3;
     width: 100%;
+    height: 0;
     max-height: 300px;
     overflow: hidden auto;
-    transition: transform 0.2s, height 0.2s;
+    transition: transform 0.2s;
     box-shadow: 2px 2px 2px 1px #0000002b;
 }
-.select__list > * {
+label {
     padding: 10px;
     transition: background-color 0.2s;
     display: block;
     cursor: pointer;
 }
-.select__list > *:hover {
+label:hover {
     background-color: rgba(169, 169, 169, 0.23);
-}
-::slotted(input) {
-    display: none;
 }`;
+        const arOptions = JSON.parse(this.getAttribute("options"));
+        const optionsNodes = arOptions.map(o => (`<label>
+    <span>${o.text}</span>
+    <input type="radio" name="${this._name}" value="${o.value}">
+</label>`), this);
         tmpl.innerHTML = `
-            <div class="select__selected"></div>
-            <div class="select__list_container">
-                <div class="select__list"></div>
-            </div>
-            <slot></slot>
-        `;
+<div class="select__selected">${this.placeholder}</div>
+<div class="select__list">${optionsNodes.join('')}</div>
+`;
         let shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.appendChild(tmpl.content.cloneNode(true));
         shadowRoot.appendChild(link);
         this.selected = this.shadowRoot.querySelector(".select__selected");
-        this.selected.innerText = this.placeholder;
         this.list = this.shadowRoot.querySelector(".select__list");
         this.init();
     }
 
     static get observedAttributes() {
-        return ['placeholder', 'disabled', 'options'];
+        return ['placeholder', 'disabled'];
     }
 
     get name() {
-        return this.input.name;
+        return this.inputs.get(0).name;
     }
 
     get value() {
-        return this.input.value;
-    }
-
-    set value(val) {
-        this.input.value = val;
-        this.selected.innerHTML = this.options.find(o => o.value == val).name;
-        this.input.dispatchEvent(new Event("change", {bubbles: true, composed: true}));
+        return this.inputs.find(i => i.checked).value;
     }
 
     init() {
-        this.input.addEventListener("change", this.onChange.bind(this));
-        this.selected.addEventListener("click", this.onActivate.bind(this));
         this.list.addEventListener("click", this.onSelect.bind(this));
-        this.refresh();
+        this.selected.addEventListener("click", this.onActivate.bind(this));
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         this[name] = newValue;
-        this.refresh();
-    }
-
-    refresh() {
-        this.options = JSON.parse(this.getAttribute('options'));
-        this.values = this.options
-        this.list.innerHTML = '';
-        this.options.forEach(o => {
-            let item = document.createElement("div");
-            item.dataset.value = o.value;
-            item.innerText = o.name;
-            this.list.appendChild(item);
-        });
     }
 
     onActivate(e) {
@@ -145,16 +114,8 @@ class CustomSelect extends HTMLElement {
         this.classList.toggle('expanded');
     }
 
-    onChange(e) {
-        this.selected.innerHTML = this.options.find(o => o.value == e.target.value).name;
-    }
-
     onSelect(e) {
-        let target = e.target.closest('[data-value]');
-        if (target) {
-            this.selected.innerText = target.innerText;
-            this.value = target.dataset.value;
-        }
+        this.selected.innerText = e.target.closest("label").innerText.trim();
         this.close();
     }
 
@@ -167,6 +128,6 @@ class CustomSelect extends HTMLElement {
     }
 }
 
-if (typeof(customElements) !== 'undefined') {
-    customElements.define('custom-select', CustomSelect);
+if ('customElements' in window) {
+    customElements.define('app-select', CustomSelect);
 }

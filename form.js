@@ -17,11 +17,11 @@ class CustomForm extends HTMLElement {
     init() {
         this.form.addEventListener("submit", function (e) {
             e.preventDefault();
-            console.log(e.target.elements['foo']);
+            console.log(e.target.elements['foo'].value);
             return false;
         });
         this.form.addEventListener("reset", function (e) {
-            e.target.querySelectorAll('custom-select, custom-text').forEach(i => i.reset());
+            e.target.querySelectorAll('app-select, app-text-input').forEach(i => i.reset());
         });
     }
 
@@ -29,6 +29,6 @@ class CustomForm extends HTMLElement {
         this[name] = newValue;
     }
 }
-if (typeof(customElements) !== 'undefined') {
-    customElements.define('custom-form', CustomForm);
+if ('customElements' in window) {
+    customElements.define('app-form', CustomForm);
 }

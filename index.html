@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+              content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Custom elements</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <app-body>
+            <app-form>
+                <form>
+                    <div>
+                        <app-select
+                                placeholder="Select group1"
+                                name="bar"
+                                options='[{"text":"34", "value":34},{"text":"35", "value":35},{"text":"36", "value":36}]'></app-select>
+                    </div>
+                    <div>
+                        <app-text-input>
+                            <input name="foo" value="12" placeholder="input value">
+                        </app-text-input>
+                    </div>
+                    <div>
+                        <input type="submit" value="Submit">
+                    </div>
+                    <div>
+                        <input type="reset" value="Reset">
+                    </div>
+                </form>
+            </app-form>
+        </app-body>
+        <script src="text.js"></script>
+        <script src="select.js"></script>
+        <script src="form.js"></script>
+        <script src="body.js"></script>
+    </body>
+</html>

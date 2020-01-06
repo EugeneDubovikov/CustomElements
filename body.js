@@ -14,13 +14,22 @@ class AppBody extends HTMLElement {
         return ['placeholder', 'disabled', 'options'];
     }
 
-    init() {}
+    init() {
+        document.body.addEventListener("click", e => {
+            const target = e.target.closest("app-select");
+            this.querySelectorAll("app-select").forEach(s => {
+               if (!Object.is(target, s)) {
+                   s.close();
+               }
+            });
+        });
+    }
 
     attributeChangedCallback(name, oldValue, newValue) {
         this[name] = newValue;
     }
 }
 
-if (typeof(customElements) !== 'undefined') {
+if ('customElements' in window) {
     customElements.define('app-body', AppBody);
 }
