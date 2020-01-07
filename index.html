@@ -11,23 +11,24 @@
     <body>
         <app-body>
             <app-form>
-                <form>
-                    <div>
-                        <app-select
-                                placeholder="Select group1"
-                                name="bar"
-                                options='[{"text":"34", "value":34},{"text":"35", "value":35},{"text":"36", "value":36}]'></app-select>
+                <form class="app-form" action="#">
+                    <div class="app-form__block">
+                        <app-select placeholder="Select item">
+                            <select name="bar">
+                                <option value="34">34</option>
+                                <option value="35">35</option>
+                                <option value="36">36</option>
+                            </select>
+                        </app-select>
                     </div>
-                    <div>
+                    <div class="app-form__block">
                         <app-text-input>
-                            <input name="foo" value="12" placeholder="input value">
+                            <input name="foo" value="12" placeholder="input value" required>
                         </app-text-input>
                     </div>
-                    <div>
-                        <input type="submit" value="Submit">
-                    </div>
-                    <div>
-                        <input type="reset" value="Reset">
+                    <div class="app-form__block">
+                        <input class="app-form__button" type="submit" value="Submit">
+                        <input class="app-form__button" type="reset" value="Reset">
                     </div>
                 </form>
             </app-form>

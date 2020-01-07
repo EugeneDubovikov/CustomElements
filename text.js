@@ -2,7 +2,6 @@ class CustomTextInput extends HTMLElement {
     constructor() {
         super();
         this.input = this.querySelector('input');
-        this.placeholder = this.getAttribute('placeholder');
         this.disabled = this.hasAttribute('disabled');
         this.throttle = '';
         this.suggestList = null;
@@ -15,7 +14,7 @@ class CustomTextInput extends HTMLElement {
     display: inline-block;
     position: relative;
 }
-:host .text__error {
+.text__error {
     position: absolute;
     opacity: 0;
     left: 0;
@@ -36,12 +35,8 @@ class CustomTextInput extends HTMLElement {
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     padding: 12px;
-    font: 12px/14px "Helios Normal", sans-serif;
 }`;
-        tmpl.innerHTML = `
-            <div class="text__error"></div>
-            <slot></slot>
-        `;
+        tmpl.innerHTML = `<div class="text__error"></div><slot></slot>`;
         let shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.appendChild(tmpl.content.cloneNode(true));
         shadowRoot.appendChild(link);
@@ -50,15 +45,7 @@ class CustomTextInput extends HTMLElement {
     }
 
     static get observedAttributes() {
-        return ['placeholder', 'disabled'];
-    }
-
-    get name() {
-        return this.input.name;
-    }
-
-    get value() {
-        return this.input.value;
+        return ['disabled'];
     }
 
     set value(val) {
@@ -77,9 +64,9 @@ class CustomTextInput extends HTMLElement {
 
     _onFocus(e) {
         if (this.suggestList) {
-            try {
+            if ('suggestRegionWorker' in window) {
                 window.suggestRegionWorker.onmessage = this._onMessage.bind(this);
-            } catch (e) {}
+            }
         }
     }
 
@@ -111,14 +98,13 @@ class CustomTextInput extends HTMLElement {
         this.errorString.innerText = error;
         this.input.dispatchEvent(new Event('change', {bubbles: true}));
         if (this.suggestList) {
-            try {
+            if ('suggestRegionWorker' in window) {
                 window.suggestRegionWorker.postMessage(e.target.value);
-            } catch (e) {}
+            }
         }
     }
 
     reset() {
-        this.input.value = '';
         this.classList.remove('valid', ['invalid']);
     }
 }

@@ -1,13 +1,14 @@
 class CustomSelect extends HTMLElement {
     constructor() {
         super();
+        this.select = this.querySelector('select');
         this.placeholder = this.getAttribute('placeholder');
         this.disabled = this.hasAttribute('disabled');
-        this._name = this.getAttribute('name');
         let tmpl = document.createElement('template');
         let link = document.createElement('style');
         link.innerText = `:host {
     display: inline-block;
+    width: 100%;
     position: relative;
 }
 :host(.expanded) .select__selected:before {
@@ -60,24 +61,23 @@ class CustomSelect extends HTMLElement {
     transition: transform 0.2s;
     box-shadow: 2px 2px 2px 1px #0000002b;
 }
-label {
+.select__list > * {
     padding: 10px;
     transition: background-color 0.2s;
     display: block;
     cursor: pointer;
 }
-label:hover {
+.select__list > *:hover {
     background-color: rgba(169, 169, 169, 0.23);
+}
+::slotted(select) {
+    display: none
 }`;
-        const arOptions = JSON.parse(this.getAttribute("options"));
-        const optionsNodes = arOptions.map(o => (`<label>
-    <span>${o.text}</span>
-    <input type="radio" name="${this._name}" value="${o.value}">
-</label>`), this);
+        const listItems = [...this.select.options].map(o => `<div data-value="${o.value}">${o.innerText}</div>`);
         tmpl.innerHTML = `
 <div class="select__selected">${this.placeholder}</div>
-<div class="select__list">${optionsNodes.join('')}</div>
-`;
+<div class="select__list">${listItems.join('')}</div>
+<slot></slot>`;
         let shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.appendChild(tmpl.content.cloneNode(true));
         shadowRoot.appendChild(link);
@@ -87,15 +87,15 @@ label:hover {
     }
 
     static get observedAttributes() {
-        return ['placeholder', 'disabled'];
+        return ['disabled', 'placeholder'];
     }
 
     get name() {
-        return this.inputs.get(0).name;
+        return this.select.name;
     }
 
     get value() {
-        return this.inputs.find(i => i.checked).value;
+        return this.select.value;
     }
 
     init() {
@@ -115,7 +115,7 @@ label:hover {
     }
 
     onSelect(e) {
-        this.selected.innerText = e.target.closest("label").innerText.trim();
+        this.selected.innerText = e.target.innerText.trim();
         this.close();
     }
 

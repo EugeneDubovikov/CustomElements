@@ -2,11 +2,6 @@ class CustomForm extends HTMLElement {
     constructor() {
         super();
         this.form = this.querySelector('form');
-        let tmpl = document.createElement('template');
-        tmpl.innerHTML = `
-            <slot></slot>`;
-        let shadowRoot = this.attachShadow({mode: 'open'});
-        shadowRoot.appendChild(tmpl.content.cloneNode(true));
         this.init();
     }
 

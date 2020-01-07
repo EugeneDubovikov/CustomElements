@@ -1,4 +1,23 @@
+* {
+    box-sizing: border-box;
+}
+*:before, *:after {
+    box-sizing: border-box;
+}
 body {
     min-height: 100vh;
     margin: 0;
+}
+
+.app-form {
+    display: inline-block;
+    padding: 0 15px;
+}
+.app-form__block {
+    margin: 15px 0;
+}
+.app-form__button {
+    display: inline-block;
+    border: none;
+    background-color: transparent;
 }
