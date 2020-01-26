@@ -1,29 +1,19 @@
-class CustomForm extends HTMLElement {
-    constructor() {
-        super();
-        this.form = this.querySelector('form');
+class CustomForm {
+    constructor(form) {
+        this.form = form;
         this.init();
     }
 
-    static get observedAttributes() {
-        return ['method', 'action'];
-    }
-
     init() {
-        this.form.addEventListener("submit", function (e) {
+        this.form.onsubmit = e => {
             e.preventDefault();
-            console.log(e.target.elements['foo'].value);
             return false;
-        });
-        this.form.addEventListener("reset", function (e) {
-            e.target.querySelectorAll('app-select, app-text-input').forEach(i => i.reset());
-        });
-    }
+        };
 
-    attributeChangedCallback(name, oldValue, newValue) {
-        this[name] = newValue;
+        this.form.onreset = ({target}) => {
+            for (const i of target.getElementsByTagName('app-select, app-text-input')) {
+                i.reset();
+            }
+        };
     }
-}
-if ('customElements' in window) {
-    customElements.define('app-form', CustomForm);
 }

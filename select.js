@@ -128,6 +128,3 @@ class CustomSelect extends HTMLElement {
     }
 }
 
-if ('customElements' in window) {
-    customElements.define('app-select', CustomSelect);
-}

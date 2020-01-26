@@ -9,33 +9,29 @@
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
-        <app-body>
-            <app-form>
-                <form class="app-form" action="#">
-                    <div class="app-form__block">
-                        <app-select placeholder="Select item">
-                            <select name="bar">
-                                <option value="34">34</option>
-                                <option value="35">35</option>
-                                <option value="36">36</option>
-                            </select>
-                        </app-select>
-                    </div>
-                    <div class="app-form__block">
-                        <app-text-input>
-                            <input name="foo" value="12" placeholder="input value" required>
-                        </app-text-input>
-                    </div>
-                    <div class="app-form__block">
-                        <input class="app-form__button" type="submit" value="Submit">
-                        <input class="app-form__button" type="reset" value="Reset">
-                    </div>
-                </form>
-            </app-form>
-        </app-body>
+        <form class="app-form" action="#" id="customForm">
+            <div class="app-form__block">
+                <app-select placeholder="Select item">
+                    <select name="bar">
+                        <option value="34">34</option>
+                        <option value="35">35</option>
+                        <option value="36">36</option>
+                    </select>
+                </app-select>
+            </div>
+            <div class="app-form__block">
+                <app-text-input>
+                    <input name="foo" value="12" placeholder="input value" required>
+                </app-text-input>
+            </div>
+            <div class="app-form__block">
+                <input class="app-form__button" type="submit" value="Submit">
+                <input class="app-form__button" type="reset" value="Reset">
+            </div>
+        </form>
         <script src="text.js"></script>
         <script src="select.js"></script>
         <script src="form.js"></script>
-        <script src="body.js"></script>
+        <script src="main.js"></script>
     </body>
 </html>

@@ -1,17 +1,13 @@
-class CustomTextInput extends HTMLElement {
+class TextInput extends HTMLElement {
     constructor() {
         super();
-        this.input = this.querySelector('input');
         this.disabled = this.hasAttribute('disabled');
-        this.throttle = '';
-        this.suggestList = null;
-        if(this.input.hasAttribute('list')) {
-            this.suggestList = this.querySelector('datalist');
-        }
         let tmpl = document.createElement('template');
         let link = document.createElement('style');
-        link.innerText = `:host {
+        link.innerText = `
+:host {
     display: inline-block;
+    width: 100%;
     position: relative;
 }
 .text__error {
@@ -36,12 +32,13 @@ class CustomTextInput extends HTMLElement {
     border-radius: 2px;
     padding: 12px;
 }`;
-        tmpl.innerHTML = `<div class="text__error"></div><slot></slot>`;
+        tmpl.innerHTML = `
+<div class="text__error"></div>
+<slot></slot>`;
         let shadowRoot = this.attachShadow({mode: 'open'});
         shadowRoot.appendChild(tmpl.content.cloneNode(true));
         shadowRoot.appendChild(link);
         this.errorString = this.shadowRoot.querySelector('.text__error');
-        this.init();
     }
 
     static get observedAttributes() {
@@ -52,37 +49,17 @@ class CustomTextInput extends HTMLElement {
         this.input.value = val;
     }
 
+    connectedCallback() {
+        this.input = this.querySelector('input');
+        this.init();
+    }
+
     init() {
-        this.input.addEventListener('focus', this._onFocus.bind(this));
         this.input.addEventListener('blur', this.validateInput.bind(this));
-        this.input.addEventListener('keyup', this._onKeyUp.bind(this));
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
         this[name] = newValue;
-    }
-
-    _onFocus(e) {
-        if (this.suggestList) {
-            if ('suggestRegionWorker' in window) {
-                window.suggestRegionWorker.onmessage = this._onMessage.bind(this);
-            }
-        }
-    }
-
-    _onKeyUp(e) {
-        clearTimeout(this.throttle);
-        this.throttle = setTimeout(this.validateInput.bind(this), 200, e);
-    }
-
-    _onMessage(message) {
-        var option;
-        this.suggestList.innerHTML = "";
-        message.data.forEach(e => {
-            option = document.createElement("option");
-            option.setAttribute("value", e.CITY_NAME);
-            this.suggestList.appendChild(option);
-        });
     }
 
     validateInput(e) {
@@ -97,18 +74,9 @@ class CustomTextInput extends HTMLElement {
         this.classList.toggle('valid', !isInvalid);
         this.errorString.innerText = error;
         this.input.dispatchEvent(new Event('change', {bubbles: true}));
-        if (this.suggestList) {
-            if ('suggestRegionWorker' in window) {
-                window.suggestRegionWorker.postMessage(e.target.value);
-            }
-        }
     }
 
     reset() {
-        this.classList.remove('valid', ['invalid']);
+        this.classList.remove('valid', 'invalid');
     }
-}
-
-if ('customElements' in window) {
-    customElements.define('app-text-input', CustomTextInput);
 }
